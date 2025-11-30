@@ -1,17 +1,37 @@
-"""Asset schema definitions."""
-from typing import List
-from pydantic import BaseModel
+"""Asset Pydantic schemas for API validation."""
 
-class AssetResponse(BaseModel):
-    """Schema for asset API response."""
-    asset_id: str
-    signals: List[dict]
+from uuid import UUID
+from typing import Optional, List
+from pydantic import BaseModel, Field
+
+
+class AssetBase(BaseModel):
+    asset_id: str = Field(..., description="Unique asset identifier")
+    latitude: Optional[float] = Field(None, description="Asset latitude")
+    longitude: Optional[float] = Field(None, description="Asset longitude")
+    description: Optional[str] = Field(None, description="Asset description")
+
+
+class AssetCreate(AssetBase):
+    pass
+
+
+class AssetUpdate(BaseModel):
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    description: Optional[str] = None
+
+
+class AssetResponse(AssetBase):
+    id: UUID = Field(..., description="Asset UUID primary key")
+
+    class Config:
+        from_attributes = True
+
 
 class AssetListResponse(BaseModel):
-    """Schema for list of assets."""
-    assets: List[AssetResponse]
+    items: List[AssetResponse] = Field(..., description="List of assets")
+    total: int = Field(..., description="Total number of assets")
 
-class AssetDTO(BaseModel):
-    """Data transfer object for assets."""
-    assetId: str
-    signalData: List[dict]
+    class Config:
+        from_attributes = True

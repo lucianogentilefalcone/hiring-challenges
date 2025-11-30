@@ -1,32 +1,36 @@
-"""Measurement schemas."""
+"""Measurement Pydantic schemas for API validation."""
+
+from uuid import UUID
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel
-from helpers.info_helper import get_date
-class MeasurementRequest(BaseModel):
-    """Request schema for measurements endpoint."""
-    signal_ids: List[str]
-    from_date: datetime
-    to_date: datetime
+from typing import Optional, List
+from pydantic import BaseModel, Field
 
-def validate_data(data, fromdt, to)  :
-    data = get_date()
-    data_new = []
-   
-    for data_point in data:
-        ts = datetime.fromisoformat( data_point['timestamp'])
-        if fromdt <= ts <= to:
-            data_new.append(data_point)
-    return data_new
 
-class MeasurementResponse(BaseModel):
-    """Response schema for measurements."""
-    signal_id: str
-    timestamp: datetime
-    value: float
-    unit: Optional[str] = None
+class MeasurementBase(BaseModel):
+    value: float = Field(..., description="Measurement value")
+    timestamp: datetime = Field(..., description="Measurement timestamp")
 
-class MeasurementsListResponse(BaseModel):
-    """List of measurements response."""
-    measurements: List[MeasurementResponse]
 
+class MeasurementCreate(MeasurementBase):
+    signal_id: UUID = Field(..., description="Signal UUID foreign key")
+
+
+class MeasurementUpdate(BaseModel):
+    value: Optional[float] = None
+    timestamp: Optional[datetime] = None
+
+
+class MeasurementResponse(MeasurementBase):
+    id: UUID = Field(..., description="Measurement UUID primary key")
+    signal_id: UUID = Field(..., description="Signal UUID foreign key")
+
+    class Config:
+        from_attributes = True
+
+
+class MeasurementListResponse(BaseModel):
+    items: List[MeasurementResponse] = Field(..., description="List of measurements")
+    total: int = Field(..., description="Total number of measurements")
+
+    class Config:
+        from_attributes = True
