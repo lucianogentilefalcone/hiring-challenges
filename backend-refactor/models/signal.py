@@ -1,27 +1,27 @@
-"""Signal model definitions."""
-from typing import Optional
-from pydantic import BaseModel
+from database import Base
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
-class SignalModel(BaseModel):
-    """Signal model."""
-    SignalGId: str
-    SignalId: str
-    SignalName: str
-    AssetId: str
-    Unit: str
 
-class Signal(BaseModel):
-    """Alternative signal representation."""
-    signal_gid: str
-    signal_id: str
-    signal_name: str
-    asset_id: str
-    unit: str
+class Signal(Base):
+    __tablename__ = "signals"
 
-class signal_dto(BaseModel):
-    """Yet another signal representation (camelCase)."""
-    signalGId: str
-    signalId: str
-    signalName: str
-    assetId: str
-    unit: str
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    signal_gid = Column(UUID(as_uuid=True), unique=True, nullable=False, index=True)
+    signal_id = Column(String(50), unique=True, nullable=False, index=True)
+    signal_name = Column(String(255), nullable=False)
+    unit = Column(String(20), nullable=False)
+
+    asset_id = Column(
+        UUID(as_uuid=True), ForeignKey("assets.id"), nullable=False, index=True
+    )
+    asset = relationship("Asset", back_populates="signals")
+
+    measurements = relationship(
+        "Measurement", back_populates="signal", cascade="all, delete-orphan"
+    )
+
+    def __repr__(self):
+        return f"<Signal(id={self.id}, signal_id={self.signal_id}, signal_name={self.signal_name})>"

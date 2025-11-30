@@ -1,17 +1,22 @@
-"""Asset model definition."""
-from typing import List, Optional
-from pydantic import BaseModel
+from database import Base
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
-class AssetModel(BaseModel):
-    """Asset model with signals."""
-    asset_id: str
-    signals: List[dict]
 
-class Asset(BaseModel):
-    """Alternative Asset representation."""
-    assetId: str
-    signalList: List[dict]
+class Asset(Base):
+    __tablename__ = "assets"
 
-def create_asset(asset_id: str, signals: list) -> AssetModel:
-    """Factory function to create asset."""
-    return AssetModel(asset_id=asset_id, signals=signals)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    asset_id = Column(String(255), unique=True, nullable=False, index=True)
+    latitude = Column(String(50), nullable=True)
+    longitude = Column(String(50), nullable=True)
+    description = Column(String(500), nullable=True)
+
+    signals = relationship(
+        "Signal", back_populates="asset", cascade="all, delete-orphan"
+    )
+
+    def __repr__(self):
+        return f"<Asset(id={self.id}, asset_id={self.asset_id})>"
