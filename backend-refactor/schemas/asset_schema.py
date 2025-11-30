@@ -7,9 +7,9 @@ from pydantic import BaseModel, Field
 
 class AssetBase(BaseModel):
     asset_id: str = Field(..., description="Unique asset identifier")
-    latitude: Optional[float] = Field(None, description="Asset latitude")
-    longitude: Optional[float] = Field(None, description="Asset longitude")
-    description: Optional[str] = Field(None, description="Asset description")
+    latitude: float = Field(..., description="Asset latitude")
+    longitude: float = Field(..., description="Asset longitude")
+    description: str = Field(..., description="Asset description")
 
 
 class AssetCreate(AssetBase):
