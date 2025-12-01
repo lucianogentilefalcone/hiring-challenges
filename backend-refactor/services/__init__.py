@@ -1,9 +1,13 @@
 """Services package."""
+
 from services.asset_service import AssetService
-from services.measurement_svc import MeasurementService, get_measurements_for_signals
+from services.signal_service import SignalService
+from services.measurement_service import MeasurementService
 from services import measurement_legacy
 
-__all__ = ["measurement_legacy",
+__all__ = [
     "AssetService",
-    "MeasurementService", "get_measurements_for_signals"
+    "SignalService",
+    "MeasurementService",
+    "measurement_legacy",
 ]
