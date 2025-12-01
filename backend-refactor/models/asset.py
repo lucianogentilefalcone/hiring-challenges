@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -10,8 +10,8 @@ class Asset(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     asset_id = Column(String(255), unique=True, nullable=False, index=True)
-    latitude = Column(String(50), nullable=False)
-    longitude = Column(String(50), nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
     description = Column(String(500), nullable=False)
 
     signals = relationship(

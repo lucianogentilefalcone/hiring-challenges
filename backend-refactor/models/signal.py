@@ -9,7 +9,6 @@ class Signal(Base):
     __tablename__ = "signals"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
-    signal_gid = Column(UUID(as_uuid=True), unique=True, nullable=False, index=True)
     signal_id = Column(String(50), unique=True, nullable=False, index=True)
     signal_name = Column(String(255), nullable=False)
     unit = Column(String(20), nullable=False)
