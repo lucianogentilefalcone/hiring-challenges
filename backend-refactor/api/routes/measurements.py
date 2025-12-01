@@ -16,7 +16,7 @@ from services import MeasurementService
 from dependencies import get_measurement_service
 
 
-router = APIRouter(prefix="/measurements", tags=["measurements"])
+router = APIRouter(prefix="/measurements", tags=["Measurements"])
 
 
 @router.get("", response_model=MeasurementListResponse)

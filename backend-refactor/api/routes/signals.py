@@ -14,7 +14,7 @@ from services import SignalService, AssetService
 from dependencies import get_signal_service, get_asset_service
 
 
-router = APIRouter(prefix="/signals", tags=["signals"])
+router = APIRouter(prefix="/signals", tags=["Signals"])
 
 
 @router.get("", response_model=SignalListResponse)
