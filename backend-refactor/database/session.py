@@ -11,15 +11,15 @@ Base = declarative_base()
 engine = create_engine(
     settings.database_url,
     echo=settings.debug_mode,
-    connect_args={"check_same_thread": False},
+    pool_pre_ping=True,
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
     """FastAPI dependency to get database session."""
-    db = SessionLocal()
+    db = session()
     try:
         yield db
     finally:
