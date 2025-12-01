@@ -1,7 +1,7 @@
 """Core configuration module."""
 
 from functools import lru_cache
-from core import AppSettings
+from core.settings import AppSettings
 
 
 @lru_cache()

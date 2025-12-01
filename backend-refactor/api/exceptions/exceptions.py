@@ -20,6 +20,13 @@ class SignalNotFoundException(HTTPException):
         )
 
 
+class SignalAlreadyExistsException(HTTPException):
+    def __init__(self, signal_id: str):
+        super().__init__(
+            status_code=409, detail=f"Signal with signal_id '{signal_id}' already exists"
+        )
+
+
 class MeasurementNotFoundException(HTTPException):
     def __init__(self, measurement_id):
         super().__init__(
