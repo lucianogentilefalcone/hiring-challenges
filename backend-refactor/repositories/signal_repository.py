@@ -24,9 +24,6 @@ class SignalRepository:
     def get_by_signal_id(self, signal_id: str) -> Optional[Signal]:
         return self.db.query(Signal).filter(Signal.signal_id == signal_id).first()
 
-    def get_by_signal_gid(self, signal_gid: UUID) -> Optional[Signal]:
-        return self.db.query(Signal).filter(Signal.signal_gid == signal_gid).first()
-
     def list_by_asset_id(self, asset_id: UUID) -> List[Signal]:
         return self.db.query(Signal).filter(Signal.asset_id == asset_id).all()
 

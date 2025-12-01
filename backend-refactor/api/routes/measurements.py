@@ -82,17 +82,6 @@ def get_signal_stats(
     return service.calculate_signal_stats(signal_id, from_date, to_date)
 
 
-@router.get("/signal/{signal_id}", response_model=MeasurementListResponse)
-def get_measurements_by_signal(
-    signal_id: UUID,
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000),
-    service: MeasurementService = Depends(get_measurement_service),
-):
-    items, total = service.get_measurements_by_signal(signal_id, skip=skip, limit=limit)
-    return MeasurementListResponse(items=items, total=total)
-
-
 @router.get("/signal/{signal_id}/range", response_model=MeasurementListResponse)
 def get_measurements_by_date_range(
     signal_id: UUID,
@@ -105,4 +94,15 @@ def get_measurements_by_date_range(
     items, total = service.get_measurements_by_date_range(
         signal_id, from_date, to_date, skip=skip, limit=limit
     )
+    return MeasurementListResponse(items=items, total=total)
+
+
+@router.get("/signal/{signal_id}", response_model=MeasurementListResponse)
+def get_measurements_by_signal(
+    signal_id: UUID,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000),
+    service: MeasurementService = Depends(get_measurement_service),
+):
+    items, total = service.get_measurements_by_signal(signal_id, skip=skip, limit=limit)
     return MeasurementListResponse(items=items, total=total)

@@ -9,9 +9,10 @@ from schemas import (
     AssetUpdate,
     AssetResponse,
     AssetListResponse,
+    SignalListResponse,
 )
-from services import AssetService
-from dependencies import get_asset_service
+from services import AssetService, SignalService
+from dependencies import get_asset_service, get_signal_service
 
 
 router = APIRouter(prefix="/assets", tags=["assets"])
@@ -58,3 +59,16 @@ def delete_asset(
     service: AssetService = Depends(get_asset_service),
 ):
     service.delete_asset(asset_id)
+
+
+@router.get("/{asset_id}/signals", response_model=SignalListResponse)
+def get_asset_signals(
+    asset_id: UUID,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000),
+    asset_service: AssetService = Depends(get_asset_service),
+    signal_service: SignalService = Depends(get_signal_service),
+):
+    asset_service.get_asset_by_id(asset_id)
+    items, total = signal_service.get_signals_by_asset(asset_id, skip=skip, limit=limit)
+    return SignalListResponse(items=items, total=total)
