@@ -10,8 +10,8 @@ from schemas import (
     SignalResponse,
     SignalListResponse,
 )
-from services import SignalService
-from dependencies import get_signal_service
+from services import SignalService, AssetService
+from dependencies import get_signal_service, get_asset_service
 
 
 router = APIRouter(prefix="/signals", tags=["signals"])
@@ -66,6 +66,8 @@ def get_signals_by_asset(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     service: SignalService = Depends(get_signal_service),
+    asset_service: AssetService = Depends(get_asset_service),
 ):
+    asset_service.get_asset_by_id(asset_id)  # Validate asset existence
     items, total = service.get_signals_by_asset(asset_id, skip=skip, limit=limit)
     return SignalListResponse(items=items, total=total)
