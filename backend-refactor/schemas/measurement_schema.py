@@ -39,7 +39,7 @@ class MeasurementListResponse(BaseModel):
 class MeasurementStatsResponse(BaseModel):
     """Statistics for measurements in a date range."""
 
-    signal_id: str = Field(..., description="Signal UUID")
+    signal_id: UUID = Field(..., description="Signal UUID")
     from_date: datetime = Field(..., description="Start date (ISO format)")
     to_date: datetime = Field(..., description="End date (ISO format)")
     count: int = Field(..., description="Number of measurements")

@@ -17,6 +17,7 @@ class AssetCreate(AssetBase):
 
 
 class AssetUpdate(BaseModel):
+    asset_id: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     description: Optional[str] = None

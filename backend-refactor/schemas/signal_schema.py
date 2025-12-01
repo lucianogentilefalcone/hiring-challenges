@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field
 
 
 class SignalBase(BaseModel):
-    signal_gid: UUID = Field(..., description="Global signal identifier")
     signal_id: str = Field(..., description="Unique signal identifier")
     signal_name: str = Field(..., description="Signal name")
     unit: str = Field(..., description="Measurement unit (e.g., kV, kW)")
@@ -17,6 +16,7 @@ class SignalCreate(SignalBase):
 
 
 class SignalUpdate(BaseModel):
+    signal_id: Optional[str] = None
     signal_name: Optional[str] = None
     unit: Optional[str] = None
 
