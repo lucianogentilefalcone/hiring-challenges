@@ -10,9 +10,6 @@ from repositories import MeasurementRepository
 from api.exceptions import MeasurementNotFoundException
 
 
-# TODO: Agregar todas las funciones que habia antes
-
-
 class MeasurementService:
     """Service for managing measurements."""
 
@@ -88,7 +85,7 @@ class MeasurementService:
 
         if not measurements:
             return {
-                "signal_id": str(signal_id),
+                "signal_id": signal_id,
                 "from_date": from_date.isoformat(),
                 "to_date": to_date.isoformat(),
                 "count": 0,
@@ -102,7 +99,7 @@ class MeasurementService:
         values = [m.value for m in measurements]
 
         return {
-            "signal_id": str(signal_id),
+            "signal_id": signal_id,
             "from_date": from_date.isoformat(),
             "to_date": to_date.isoformat(),
             "count": len(values),

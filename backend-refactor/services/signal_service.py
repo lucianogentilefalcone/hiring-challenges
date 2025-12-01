@@ -6,7 +6,7 @@ from uuid import UUID
 from models import Signal
 from schemas import SignalCreate, SignalUpdate
 from repositories import SignalRepository
-from api.exceptions import SignalNotFoundException
+from api.exceptions import SignalNotFoundException, SignalAlreadyExistsException
 
 
 class SignalService:
@@ -35,6 +35,10 @@ class SignalService:
         return paginated, total
 
     def create_signal(self, signal_in: SignalCreate) -> Signal:
+        existing = self.repo.get_by_signal_id(signal_in.signal_id)
+        if existing:
+            raise SignalAlreadyExistsException(signal_in.signal_id)
+
         signal = Signal(**signal_in.model_dump())
         return self.repo.create(signal)
 
@@ -42,6 +46,11 @@ class SignalService:
         signal = self.repo.get_by_id(signal_id)
         if not signal:
             raise SignalNotFoundException(signal_id)
+
+        if signal_in.signal_id and signal_in.signal_id != signal.signal_id:
+            existing = self.repo.get_by_signal_id(signal_in.signal_id)
+            if existing:
+                raise SignalAlreadyExistsException(signal_in.signal_id)
 
         update_data = signal_in.model_dump(exclude_unset=True)
         for key, value in update_data.items():

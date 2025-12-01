@@ -42,6 +42,11 @@ class AssetService:
         if not asset:
             raise AssetNotFoundException(asset_id)
 
+        if asset_in.asset_id and asset_in.asset_id != asset.asset_id:
+            existing = self.repo.get_by_asset_id(asset_in.asset_id)
+            if existing:
+                raise AssetAlreadyExistsException(asset_in.asset_id)
+
         update_data = asset_in.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(asset, key, value)
