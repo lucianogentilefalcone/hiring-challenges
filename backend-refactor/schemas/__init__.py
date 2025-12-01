@@ -20,6 +20,7 @@ from schemas.measurement_schema import (
     MeasurementUpdate,
     MeasurementResponse,
     MeasurementListResponse,
+    MeasurementStatsResponse,
 )
 
 __all__ = [
@@ -38,4 +39,5 @@ __all__ = [
     "MeasurementUpdate",
     "MeasurementResponse",
     "MeasurementListResponse",
+    "MeasurementStatsResponse",
 ]

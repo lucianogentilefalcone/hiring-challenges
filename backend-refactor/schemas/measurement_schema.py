@@ -34,3 +34,17 @@ class MeasurementListResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class MeasurementStatsResponse(BaseModel):
+    """Statistics for measurements in a date range."""
+
+    signal_id: str = Field(..., description="Signal UUID")
+    from_date: datetime = Field(..., description="Start date (ISO format)")
+    to_date: datetime = Field(..., description="End date (ISO format)")
+    count: int = Field(..., description="Number of measurements")
+    mean: Optional[float] = Field(None, description="Average value")
+    min: Optional[float] = Field(None, description="Minimum value")
+    max: Optional[float] = Field(None, description="Maximum value")
+    median: Optional[float] = Field(None, description="Median value")
+    std_dev: Optional[float] = Field(None, description="Standard deviation")

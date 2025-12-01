@@ -10,6 +10,7 @@ from schemas import (
     MeasurementUpdate,
     MeasurementResponse,
     MeasurementListResponse,
+    MeasurementStatsResponse,
 )
 from services import MeasurementService
 from dependencies import get_measurement_service
@@ -59,6 +60,26 @@ def delete_measurement(
     service: MeasurementService = Depends(get_measurement_service),
 ):
     service.delete_measurement(measurement_id)
+
+
+@router.get("/signal/{signal_id}/stats", response_model=MeasurementStatsResponse)
+def get_signal_stats(
+    signal_id: UUID,
+    from_date: datetime = Query(...),
+    to_date: datetime = Query(...),
+    service: MeasurementService = Depends(get_measurement_service),
+):
+    """Calculate statistics for a signal over a date range.
+
+    Returns:
+        - count: Number of measurements
+        - mean: Average value
+        - min: Minimum value
+        - max: Maximum value
+        - median: Median value
+        - std_dev: Standard deviation
+    """
+    return service.calculate_signal_stats(signal_id, from_date, to_date)
 
 
 @router.get("/signal/{signal_id}", response_model=MeasurementListResponse)
