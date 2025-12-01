@@ -48,7 +48,7 @@ class MeasurementRepository:
         )
 
     def update(self, measurement: Measurement) -> Measurement:
-        self.db.merge(measurement)
+        measurement = self.db.merge(measurement)
         self.db.commit()
         self.db.refresh(measurement)
         return measurement

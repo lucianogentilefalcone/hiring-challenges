@@ -37,7 +37,7 @@ class SignalRepository:
         return items, total
 
     def update(self, signal: Signal) -> Signal:
-        self.db.merge(signal)
+        signal = self.db.merge(signal)
         self.db.commit()
         self.db.refresh(signal)
         return signal

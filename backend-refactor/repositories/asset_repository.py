@@ -29,7 +29,7 @@ class AssetRepository:
         return items, total
 
     def update(self, asset: Asset) -> Asset:
-        self.db.merge(asset)
+        asset = self.db.merge(asset)
         self.db.commit()
         self.db.refresh(asset)
         return asset
