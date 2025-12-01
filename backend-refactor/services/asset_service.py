@@ -6,7 +6,7 @@ from uuid import UUID
 from models import Asset
 from schemas import AssetCreate, AssetUpdate
 from repositories import AssetRepository
-from api import (
+from api.exceptions import (
     AssetNotFoundException,
     AssetAlreadyExistsException,
 )
