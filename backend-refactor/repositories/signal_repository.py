@@ -27,11 +27,14 @@ class SignalRepository:
     def get_by_signal_gid(self, signal_gid: UUID) -> Optional[Signal]:
         return self.db.query(Signal).filter(Signal.signal_gid == signal_gid).first()
 
-    def list_all(self) -> List[Signal]:
-        return self.db.query(Signal).all()
-
     def list_by_asset_id(self, asset_id: UUID) -> List[Signal]:
         return self.db.query(Signal).filter(Signal.asset_id == asset_id).all()
+
+    def list_paginated(self, skip: int, limit: int):
+        query = self.db.query(Signal)
+        total = query.count()
+        items = query.offset(skip).limit(limit).all()
+        return items, total
 
     def update(self, signal: Signal) -> Signal:
         self.db.merge(signal)

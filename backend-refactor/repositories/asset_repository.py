@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from uuid import UUID
-from typing import Optional, List
+from typing import Optional
 from models import Asset
 
 
@@ -22,8 +22,11 @@ class AssetRepository:
     def get_by_asset_id(self, asset_id: str) -> Optional[Asset]:
         return self.db.query(Asset).filter(Asset.asset_id == asset_id).first()
 
-    def list_all(self) -> List[Asset]:
-        return self.db.query(Asset).all()
+    def list_paginated(self, skip: int, limit: int):
+        query = self.db.query(Asset)
+        total = query.count()
+        items = query.offset(skip).limit(limit).all()
+        return items, total
 
     def update(self, asset: Asset) -> Asset:
         self.db.merge(asset)

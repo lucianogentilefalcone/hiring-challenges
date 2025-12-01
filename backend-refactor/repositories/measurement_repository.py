@@ -24,8 +24,11 @@ class MeasurementRepository:
             self.db.query(Measurement).filter(Measurement.id == measurement_id).first()
         )
 
-    def list_all(self) -> List[Measurement]:
-        return self.db.query(Measurement).all()
+    def list_paginated(self, skip: int, limit: int):
+        query = self.db.query(Measurement)
+        total = query.count()
+        items = query.offset(skip).limit(limit).all()
+        return items, total
 
     def list_by_signal_id(self, signal_id: UUID) -> List[Measurement]:
         return (
